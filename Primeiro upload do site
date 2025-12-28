@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bryan & Tainá 💖</title>
+
+<style>
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:linear-gradient(135deg,#020617,#020617,#0b141a);
+  color:#e5e7eb;
+  text-align:center;
+}
+
+.hidden{display:none}
+
+.login{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:20px;
+}
+
+input{
+  padding:12px;
+  border-radius:12px;
+  border:none;
+  outline:none;
+  font-size:1em;
+}
+
+button{
+  padding:12px 30px;
+  border:none;
+  border-radius:20px;
+  background:#ec4899;
+  color:white;
+  cursor:pointer;
+  font-size:1em;
+}
+
+header{padding:40px 20px}
+
+.counter{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:15px;
+  max-width:900px;
+  margin:30px auto;
+}
+
+.box{
+  background:rgba(255,255,255,0.06);
+  border-radius:15px;
+  padding:20px;
+}
+
+.box span{
+  font-size:2em;
+  font-weight:bold;
+  color:#f9a8d4;
+}
+
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:20px;
+  padding:40px;
+}
+
+.gallery img{
+  width:100%;
+  border-radius:20px;
+  box-shadow:0 15px 30px rgba(0,0,0,.6);
+  opacity:0;
+  transform:scale(.9);
+  animation:photoIn 1s forwards;
+}
+
+.gallery img:nth-child(1){animation-delay:.2s}
+.gallery img:nth-child(2){animation-delay:.4s}
+.gallery img:nth-child(3){animation-delay:.6s}
+.gallery img:nth-child(4){animation-delay:.8s}
+.gallery img:nth-child(5){animation-delay:1s}
+
+@keyframes photoIn{
+  to{opacity:1;transform:scale(1)}
+}
+
+/* PLAYER */
+.player{
+  max-width:400px;
+  margin:30px auto;
+  background:#111827;
+  padding:20px;
+  border-radius:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,.6);
+}
+
+.player h3{margin:0;color:#f472b6}
+
+.controls{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:15px;
+}
+
+.controls button{
+  background:#ec4899;
+  border:none;
+  color:white;
+  font-size:18px;
+  padding:10px 14px;
+  border-radius:50%;
+}
+
+.progress{
+  width:100%;
+}
+
+footer{
+  padding:30px;
+  opacity:.6;
+}
+</style>
+</head>
+
+<body>
+
+<div id="login" class="login">
+  <h1>🔒 Presente Secreto</h1>
+  <p>Exclusivo para Bryan & Tainá</p>
+  <input type="password" id="password" placeholder="Digite a senha">
+  <button id="enterBtn">Entrar</button>
+</div>
+
+<div id="content" class="hidden">
+
+<header>
+  <h1>Bryan & Tainá 💖</h1>
+  <p>Desde <strong>18/10/2025 às 10:00</strong></p>
+</header>
+
+<section class="counter">
+  <div class="box"><span id="years">0</span>Anos</div>
+  <div class="box"><span id="months">0</span>Meses</div>
+  <div class="box"><span id="days">0</span>Dias</div>
+  <div class="box"><span id="hours">0</span>Horas</div>
+  <div class="box"><span id="minutes">0</span>Minutos</div>
+  <div class="box"><span id="seconds">0</span>Segundos</div>
+</section>
+
+<!-- PLAYER -->
+<div class="player">
+  <h3>🎶 Nossa música</h3>
+  <div class="controls">
+    <button id="playBtn">▶</button>
+    <input type="range" id="progress" class="progress" value="0">
+  </div>
+</div>
+
+<section class="gallery">
+  <img src="foto1.jpg">
+  <img src="foto2.jpg">
+  <img src="foto3.jpg">
+  <img src="foto4.jpg">
+  <img src="foto5.jpg">
+</section>
+
+<footer>
+  Feito com ❤️ para Bryan & Tainá
+</footer>
+
+</div>
+
+<audio id="music">
+  <source src="musica.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const correctPassword='18102025'
+const startDate=new Date('2025-10-18T10:00:00')
+const music=document.getElementById('music')
+const playBtn=document.getElementById('playBtn')
+const progress=document.getElementById('progress')
+
+document.getElementById('enterBtn').onclick=()=>{
+  if(password.value===correctPassword){
+    login.style.display='none'
+    content.classList.remove('hidden')
+    music.play().catch(()=>{})
+    try{
+      if(document.fullscreenEnabled) document.documentElement.requestFullscreen().catch(()=>{})
+    }catch(e){}
+  }else alert('Senha incorreta 💔')
+}
+
+playBtn.onclick=()=>{
+  if(music.paused){
+    music.play()
+    playBtn.textContent='⏸'
+  }else{
+    music.pause()
+    playBtn.textContent='▶'
+  }
+}
+
+music.ontimeupdate=()=>{
+  progress.value=(music.currentTime/music.duration)*100||0
+}
+
+progress.oninput=()=>{
+  music.currentTime=(progress.value/100)*music.duration
+}
+
+function updateCounter(){
+  let diff=new Date()-startDate
+  if(diff<0) diff=0
+  const s=Math.floor(diff/1000)
+  seconds.textContent=s%60
+  minutes.textContent=Math.floor(s/60)%60
+  hours.textContent=Math.floor(s/3600)%24
+  days.textContent=Math.floor(s/86400)%30
+  months.textContent=Math.floor(s/2628000)%12
+  years.textContent=Math.floor(s/31536000)
+}
+setInterval(updateCounter,1000)
+updateCounter()
+</script>
+
+</body>
+</html>
